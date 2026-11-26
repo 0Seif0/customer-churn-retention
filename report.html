@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Customer Churn Prediction — Executive Report (Group 2)</title>
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; background: #f4f6fa; color: #13243a; line-height: 1.6; }
+    header { background: #13243a; color: #fff; padding: 36px 24px; }
+    header .wrap, main { max-width: 980px; margin: 0 auto; }
+    header small { color: #75dac1; letter-spacing: 1.5px; font-weight: 700; text-transform: uppercase; }
+    header h1 { margin: 8px 0 6px; font-size: 30px; }
+    main { padding: 24px; }
+    .card { background: #fff; border: 1px solid #dce3ec; border-radius: 12px; padding: 22px; margin-bottom: 20px; }
+    h2 { margin-top: 0; color: #116959; font-size: 20px; border-bottom: 1px solid #e6ecf2; padding-bottom: 8px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #e6ecf2; }
+    th { background: #f8fafc; font-weight: 600; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
+    .kpi { background: #eef7f4; border-radius: 10px; padding: 14px; }
+    .kpi b { display: block; font-size: 24px; color: #116959; }
+    code { background: #eef2f6; padding: 2px 6px; border-radius: 4px; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <small>DEPI Graduation Project · Group 2</small>
+      <h1>Customer Churn Prediction &amp; Retention Intelligence</h1>
+      <p>Executive Summary Report — EDA, Feature Engineering, KNN &amp; SVM Evaluation</p>
+    </div>
+  </header>
+  <main>
+    <section class="card">
+      <h2>1. Dataset Overview</h2>
+      <div class="kpi-grid">
+        <div class="kpi"><span>Total Customers</span><b>7,043</b></div>
+        <div class="kpi"><span>Training Split (80%)</span><b>5,634</b></div>
+        <div class="kpi"><span>Held-Out Test (20%)</span><b>1,409</b></div>
+        <div class="kpi"><span>Churn Rate</span><b>26.5%</b></div>
+        <div class="kpi"><span>Processed Features</span><b>54</b></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>2. Key EDA Findings</h2>
+      <ul>
+        <li><strong>Data Cleaning:</strong> 11 rows had whitespace in <code>TotalCharges</code> (all with <code>tenure == 0</code>), safely imputed with <code>0.0</code>. Zero duplicate rows.</li>
+        <li><strong>Contract Type:</strong> Month-to-month contracts churn at <strong>~42.7%</strong> vs <strong>~2.8%</strong> for 2-year contracts.</li>
+        <li><strong>Tenure:</strong> New customers (0–12 months) carry the highest churn risk.</li>
+        <li><strong>Payment Method:</strong> Electronic check users churn at <strong>~45.3%</strong> vs ~15–17% for automatic payments.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>3. Modeling &amp; Held-Out Test Results</h2>
+      <p>Both models were tuned using 5-fold Stratified Cross-Validation on training data only (selected by mean CV F1), then evaluated once on the isolated <code>test_data.csv</code> split.</p>
+      <table>
+        <thead>
+          <tr><th>Metric</th><th>KNN (k=41, uniform, p=1)</th><th>SVM (RBF, C=1, balanced)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Accuracy</td><td>0.7906</td><td>0.7502</td></tr>
+          <tr><td>Precision</td><td>0.6106</td><td>0.5189</td></tr>
+          <tr><td><strong>Recall (Churn)</strong></td><td>0.5829</td><td><strong>0.8075</strong></td></tr>
+          <tr><td><strong>F1 Score</strong></td><td>0.5964</td><td><strong>0.6318</strong></td></tr>
+          <tr><td>ROC-AUC</td><td><strong>0.8391</strong></td><td>0.8277</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:12px;"><strong>Recommendation:</strong> Use <strong>SVM</strong> (saved as <code>customer_churn_model.pkl</code>) when maximizing churner detection (Recall = 80.75%) is the business priority.</p>
+    </section>
+
+    <section class="card">
+      <h2>4. Saved Deliverables</h2>
+      <ul>
+        <li><code>EDA_Customer_Churn.ipynb</code> — Full exploratory analysis and data cleaning</li>
+        <li><code>model_building.ipynb</code> — Leakage-safe preprocessing, tuning, evaluation, and model export</li>
+        <li><code>cleaned_data.csv</code> &amp; <code>test_data.csv</code> — Cleaned dataset &amp; isolated 20% test split</li>
+        <li><code>customer_churn_model.pkl</code> &amp; <code>customer_churn_preprocessor.pkl</code> — Production-ready joblib artifacts</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
