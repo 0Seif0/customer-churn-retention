@@ -48,6 +48,7 @@ customer-churn-retention/
 ├── customer_churn_model.pkl           # Recommended end-to-end SVM pipeline (raw → prediction)
 ├── customer_churn_knn_model.pkl       # Tuned end-to-end KNN pipeline
 ├── customer_churn_preprocessor.pkl    # Fitted FeatureEngineer + ColumnTransformer
+├── app.py                             # Interactive local web demo (port 7860) for live testing
 └── report.html                        # Executive summary report (open in browser)
 ```
 
@@ -132,7 +133,11 @@ python -m venv .venv
 # 3. Install dependencies
 pip install -r requirements.txt
 
-# 4. Open notebooks
+# 4. Run the interactive web demo (for live testing during presentation)
+python app.py
+# → Open http://127.0.0.1:7860
+
+# 5. Or open the notebooks
 jupyter notebook
 ```
 
